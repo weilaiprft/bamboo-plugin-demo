@@ -39,19 +39,10 @@ public class TaskExample implements TaskType
         final BuildLogger buildLogger = taskContext.getBuildLogger();
 
         try {
-
-            final String environmetName = taskContext.getConfigurationMap().get("environment");
-
-            DeploymentProject deploymentProject = getMatchingDeploymentProject("DeploymentProject");
-
-            DeploymentVersion deploymentVersion = deploymentVersionService.getOrCreateDeploymentVersion(deploymentProject.getId(), taskContext.getBuildContext().getParentBuildContext().getPlanResultKey());
-
-            Environment environment = getMatchingEnvironment(deploymentProject, environmetName);
-
-            deploymentExecutionService.prepareDeploymentContext(environment, deploymentVersion, taskContext.getBuildContext().getTriggerReason());
-
-            buildLogger.addBuildLogEntry(deploymentVersion.getName() + " deployment to " + environment + " triggered.");
-
+	    buildLogger.addBuildLogEntry("*****************  Hello, World! *****************");
+            final String env = taskContext.getConfigurationMap().get("environment");
+	    buildLogger.addBuildLogEntry("environment name from config map is " + env);
+					 
             return TaskResultBuilder.create(taskContext).success().build();
 
         }
