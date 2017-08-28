@@ -11,6 +11,10 @@ import com.atlassian.bamboo.task.*;
 import com.atlassian.plugin.spring.scanner.annotation.component.Scanned;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.util.List;
 
 @Scanned
@@ -44,7 +48,27 @@ public class TaskExample implements TaskType
 	        buildLogger.addBuildLogEntry("use login : " + uid);
             final String pwd = taskContext.getConfigurationMap().get("pwd");
             buildLogger.addBuildLogEntry("use pwd : " + pwd);
-					 
+			// working dir
+            File workingDir = taskContext.getWorkingDirectory();
+            buildLogger.addBuildLogEntry("workingDir directory is " + workingDir.getAbsolutePath());
+
+            // get jar dir
+            File jarDir = new File(workingDir.getAbsolutePath() + File.separator + "target");
+            buildLogger.addBuildLogEntry("jarDir directory is " + jarDir.getAbsolutePath());
+
+            // get jarfile
+            File[] jarFiles = jarDir.listFiles(new FilenameFilter() {
+                @Override public boolean accept(File dir, String name) {
+                    return name.endsWith(".jar");
+                }
+            });
+
+            // should only have 1
+            buildLogger.addBuildLogEntry("number of jar files is " + jarFiles.length);
+            for(File f : jarFiles){
+                buildLogger.addBuildLogEntry("jar file name is " + f.getName());
+            }
+
             return TaskResultBuilder.create(taskContext).success().build();
 
         }
