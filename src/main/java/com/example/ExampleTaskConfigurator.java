@@ -9,8 +9,8 @@ import java.util.*;
 public class ExampleTaskConfigurator extends AbstractTaskConfigurator {
 
 	private String[] fields = new String[]{
-			"environment",
-			"deploymentProject"
+			"uid",
+			"pwd"
 	};
 
 	//TODO (save / validation logic)

@@ -40,8 +40,10 @@ public class TaskExample implements TaskType
 
         try {
 	    buildLogger.addBuildLogEntry("*****************  Hello, World! *****************");
-            final String env = taskContext.getConfigurationMap().get("environment");
-	    buildLogger.addBuildLogEntry("environment name from config map is " + env);
+            final String uid = taskContext.getConfigurationMap().get("uid");
+	        buildLogger.addBuildLogEntry("use login : " + uid);
+            final String pwd = taskContext.getConfigurationMap().get("pwd");
+            buildLogger.addBuildLogEntry("use pwd : " + pwd);
 					 
             return TaskResultBuilder.create(taskContext).success().build();
 

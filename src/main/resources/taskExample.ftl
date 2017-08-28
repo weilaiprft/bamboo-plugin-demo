@@ -1,2 +1,2 @@
-[@ww.textfield label="Environment name" name="environment" required='true'/]
-[@ww.textfield label="Deployment Project name" name="deploymentProject  " required='true'/]
+[@ww.textfield label="User Name" name="uid" required='true'/]
+[@ww.textfield label="Password" name="pwd" required='true'/]
