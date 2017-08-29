@@ -10,7 +10,6 @@ import com.atlassian.bamboo.deployments.versions.service.DeploymentVersionServic
 import com.atlassian.bamboo.task.*;
 import com.atlassian.plugin.spring.scanner.annotation.component.Scanned;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
-import com.wei.test.updateNavigator.UpdatePluginVersion;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
