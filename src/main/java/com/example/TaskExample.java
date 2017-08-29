@@ -74,7 +74,7 @@ public class TaskExample implements TaskType {
 	        final String url = "https://imgcmd01.dev.flagstar.com:9443/navigator/";
 	        final String filePath = "/nas/webpatches/navigator/dev/case/plugins/" + buildFile;	        
 	        
-	        buildLogger.addBuildLogEntry("updating navigator plugin version to " + f.getName());
+	        buildLogger.addBuildLogEntry("updating navigator plugin version to " + buildFile);
 	        UpdatePluginVersion upv = new UpdatePluginVersion(url, uid, pwd, filePath);	        
 			upv.perform();			
 
