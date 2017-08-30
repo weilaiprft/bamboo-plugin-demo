@@ -76,7 +76,7 @@ public class TaskExample implements TaskType {
 	        
 	        buildLogger.addBuildLogEntry("updating navigator plugin version to " + buildFile);
 	        UpdatePluginVersion upv = new UpdatePluginVersion(url, uid, pwd, filePath);	        
-			upv.perform();			
+			upv.perform(buildLogger);			
 
 			return TaskResultBuilder.create(taskContext).success().build();
 
