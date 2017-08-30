@@ -73,8 +73,8 @@ public class TaskExample implements TaskType {
 	        final String filePath = "/nas/webpatches/navigator/dev/case/plugins/" + buildFile;	        
 	        
 	        buildLogger.addBuildLogEntry("updating navigator plugin version to " + buildFile);
-	        UpdatePluginVersion upv = new UpdatePluginVersion(url, uid, pwd, filePath);	        
-			upv.perform(buildLogger);			
+	        UpdatePluginVersion upv = new UpdatePluginVersion(url, uid, pwd, filePath, buildLogger);	        
+			result = upv.perform();			
 
 			return result;
 		} catch (Exception exception) {
