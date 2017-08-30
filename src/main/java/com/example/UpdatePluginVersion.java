@@ -82,22 +82,20 @@ public class UpdatePluginVersion{
     public boolean perform() throws IOException, InterruptedException {
 
         boolean result = false;
-        this.buildLogger.addBuildLogEntry("*****************  BuildLogger *****************");
+        this.buildLogger.addBuildLogEntry("connecting to icnadmin desktop");
         HttpClient httpclient = new HttpClient();
         httpclient.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
-        logger.info("perform");
-        
-      
-        
+                
         // Logon, reload and save configuration
         String security_token = logon(httpclient);
         if (security_token != null) {
+            this.buildLogger.addBuildLogEntry("we have a security token");
             JSONObject loadResult = reload(httpclient, security_token);
             if (loadResult != null) {
                 try {
                     result = save(httpclient, loadResult, security_token);
                 } catch (Exception e) {
-                    logger.error("ERROR: Exception while reloading the plugin: " + e.getMessage());                    
+                    this.buildLogger.addBuildLogEntry("ERROR: Exception while saving the plugin version: " + e.getMessage());                    
                 }
             }
         }
@@ -151,7 +149,8 @@ public class UpdatePluginVersion{
      *         Exception is already logged if <code>null</code> is returned.
      */
     private String logon(HttpClient httpClient) {
-        logger.info("Connecting to ICN as " + eUsername + "...");
+        
+        this.buildLogger.addBuildLogEntry("Connecting to ICN as " + eUsername + "...");
         
         String res = null;
         
@@ -162,10 +161,11 @@ public class UpdatePluginVersion{
         String json = null;
         try {
             httpClient.executeMethod(httpPost);
-            System.out.println(httpPost.getStatusLine());
+            this.buildLogger.addBuildLogEntry("post status is " + httpPost.getStatusLine());
+            
             json = readOneLineHttp(httpPost);
             if (json == null) {
-                logger.info("Empty response from the server while logging in.");
+                this.buildLogger.addBuildLogEntry("Empty response from the server while logging in.");
                 return null;
             }
             // Unsecure the json if prefix is activated in servlet
@@ -175,7 +175,7 @@ public class UpdatePluginVersion{
             JSONObject jsonObj = new JSONObject(json);
             
             if (!jsonObj.has("security_token")) {
-                logger.info("ERROR: Exception while logging into ICN. Response was " + json);
+                this.buildLogger.addBuildLogEntry("ERROR: Exception while logging into ICN. Response was " + json);
             } else {
                 res = (String) jsonObj.get("security_token");
                 if (res != null && !"".equals(res)) {
@@ -185,8 +185,7 @@ public class UpdatePluginVersion{
                 }
             }            
         } catch (Exception e) {            
-            logger.error(e.getMessage());
-            logger.info("Login response was: " + json);
+            this.buildLogger.addBuildLogEntry("Login response was: " + json);
         } finally {
             httpPost.releaseConnection();
         }
@@ -204,7 +203,7 @@ public class UpdatePluginVersion{
      * @return the result of the call, will be needed to save the configuration
      */
     private JSONObject reload(HttpClient httpClient, String security_token) {
-        logger.info("Reloading plugin " + eFile + "...");
+        this.buildLogger.addBuildLogEntry("Reloading plugin " + eFile + "...");
         
         JSONObject res = null;
         
@@ -219,11 +218,11 @@ public class UpdatePluginVersion{
             httpClient.executeMethod(httpPost);
             if (httpPost.getStatusCode()!= 200) {
                 logger.info("KO");
-                logger.info(LOAD_URL + " returned " + httpPost.getStatusLine());
+                this.buildLogger.addBuildLogEntry("Error: " + LOAD_URL + " returned " + httpPost.getStatusLine());
             } else {
                 json = readOneLineHttp(httpPost);
                 if (json == null) {
-                    logger.info("Empty response from the server while reloading the plugin.");
+                    this.buildLogger.addBuildLogEntry("Empty response from the server while reloading the plugin.");
                     return null;
                 }
                 // Unsecure the json if prefix is activated in servlet
@@ -234,17 +233,17 @@ public class UpdatePluginVersion{
                 
                 if (!res.has("name") || !res.has("id") || !res.has("version") || !res.has("configClass")) {
                     logger.info("KO");
-                    logger.info("Response does not have correct attributes: " + json);
-                    logger.info("It should contain the following attributes: name, id, version, configClass");
+                    this.buildLogger.addBuildLogEntry("Response does not have correct attributes: " + json);
+                    this.buildLogger.addBuildLogEntry("It should contain the following attributes: name, id, version, configClass");
                     res = null;
                 } else {
-                    logger.info("OK");
-                    logger.info("Plug-in " + res.getString("name") + "(id: " + res.getString("id") + ")" + " successfully reloaded.");
+                    this.buildLogger.addBuildLogEntry("************************************************");
+                    this.buildLogger.addBuildLogEntry("Plug-in " + res.getString("name") + "(id: " + res.getString("id") + ")" + " successfully reloaded.");
                 }                                
             }
         } catch (Exception e) {            
-            logger.error(e.getMessage());
-            logger.info("LoadPlugin response was: " + json);
+            this.buildLogger.addBuildLogEntry(e.getMessage());
+            this.buildLogger.addBuildLogEntry("LoadPlugin response was: " + json);
         } finally {
             httpPost.releaseConnection();
         }
@@ -265,7 +264,7 @@ public class UpdatePluginVersion{
      * @throws JSONException
      */
     private boolean save(HttpClient httpClient, JSONObject loadResult, String security_token) throws JSONException {
-        logger.info("Saving configuration...");
+        this.buildLogger.addBuildLogEntry("Saving configuration...");
         
         boolean res = false;
         
@@ -290,11 +289,11 @@ public class UpdatePluginVersion{
             httpClient.executeMethod(httpPost);
             if (httpPost.getStatusCode() != 200) {
                 logger.info("KO");
-                logger.info(SAVE_URL + " returned " + httpPost.getStatusLine());
+                this.buildLogger.addBuildLogEntry(SAVE_URL + " returned " + httpPost.getStatusLine());
             } else {
                 json = readOneLineHttp(httpPost);
                 if (json == null) {
-                    logger.info("Empty response from the server while saving the configuration.");
+                    this.buildLogger.addBuildLogEntry("Empty response from the server while saving the configuration.");
                     return false;
                 }
                 // Unsecure the json if prefix is activated in servlet
@@ -304,15 +303,15 @@ public class UpdatePluginVersion{
                 JSONObject jsonObj = new JSONObject(json);
                 logger.info("JSON conversion OK");
                 JSONArray messages = jsonObj.getJSONArray("messages");
-                logger.info("Returned message is:");
+                this.buildLogger.addBuildLogEntry("Returned message is:");
                 for (int i = 0; i < messages.length(); i++) {
-                    logger.info(messages.getJSONObject(i).getString("text"));
+                    this.buildLogger.addBuildLogEntry(messages.getJSONObject(i).getString("text"));
                 }
                 res = true;
             }
         } catch (Exception e) {            
-            logger.error(e.getMessage());
-            logger.info("configuration response was: " + json);
+            this.buildLogger.addBuildLogEntry(e.getMessage());
+            this.buildLogger.addBuildLogEntry("configuration response was: " + json);
         } finally {
             httpPost.releaseConnection();
         }
