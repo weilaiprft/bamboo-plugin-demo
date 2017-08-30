@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 
+import com.atlassian.bamboo.build.logger.BuildLogger;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
@@ -76,10 +77,10 @@ public class UpdatePluginVersion{
     }
     
     
-    public boolean perform() throws IOException, InterruptedException {
+    public boolean perform(BuildLogger buildLogger) throws IOException, InterruptedException {
 
         boolean result = false;
-        
+        buildLogger.addBuildLogEntry("*****************  BuildLogger *****************");
         HttpClient httpclient = new HttpClient();
         httpclient.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
         logger.info("perform");
