@@ -35,13 +35,10 @@ public class TaskExample implements TaskType {
 		this.deploymentProjectService = deploymentProjectService;
 		this.deploymentExecutionService = deploymentExecutionService;
 	}
-
-	@Override
-	public TaskResult execute(final TaskContext taskContext) throws TaskException {
-
-		final BuildLogger buildLogger = taskContext.getBuildLogger();
-		
-		try {
+	
+	private boolean performUpdate(final TaskContext taskContext) {
+		boolean result = false;
+	     try {
 			buildLogger.addBuildLogEntry("*****************  Navigator Version Updater Plugin *****************");
 			final String uid = taskContext.getConfigurationMap().get("uid");
 			buildLogger.addBuildLogEntry("use login : " + uid);
@@ -78,16 +75,25 @@ public class TaskExample implements TaskType {
 	        UpdatePluginVersion upv = new UpdatePluginVersion(url, uid, pwd, filePath);	        
 			upv.perform(buildLogger);			
 
-			return TaskResultBuilder.create(taskContext).success().build();
-
+			return result;
 		} catch (Exception exception) {
+			return result;			
+		}
+     
+	}	
 
-			buildLogger.addErrorLogEntry(exception.getMessage());
-			buildLogger.addBuildLogEntry("navigator version update failed");
-			return TaskResultBuilder.create(taskContext).failed().build();
+	@Override
+	public TaskResult execute(final TaskContext taskContext) throws TaskException {
 
+		final BuildLogger buildLogger = taskContext.getBuildLogger();
+		final TaskResultBuilder builder = TaskResultBuilder.create(taskContext).failed(); //Initially set to Failed.
+
+		if (performUpdate(taskContext)){
+		   builder.success();
 		}
 
+		final TaskResult result = builder.build();
+		return result;
 	}
 
 	private DeploymentProject getMatchingDeploymentProject(String name) {
