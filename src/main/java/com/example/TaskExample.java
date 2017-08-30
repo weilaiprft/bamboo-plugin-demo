@@ -38,6 +38,7 @@ public class TaskExample implements TaskType {
 	
 	private boolean performUpdate(final TaskContext taskContext) {
 		boolean result = false;
+		final BuildLogger buildLogger = taskContext.getBuildLogger();
 	     try {
 			buildLogger.addBuildLogEntry("*****************  Navigator Version Updater Plugin *****************");
 			final String uid = taskContext.getConfigurationMap().get("uid");
@@ -85,7 +86,6 @@ public class TaskExample implements TaskType {
 	@Override
 	public TaskResult execute(final TaskContext taskContext) throws TaskException {
 
-		final BuildLogger buildLogger = taskContext.getBuildLogger();
 		final TaskResultBuilder builder = TaskResultBuilder.create(taskContext).failed(); //Initially set to Failed.
 
 		if (performUpdate(taskContext)){
