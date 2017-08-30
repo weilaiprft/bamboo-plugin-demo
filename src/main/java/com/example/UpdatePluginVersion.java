@@ -44,12 +44,13 @@ public class UpdatePluginVersion{
     private transient String eUsername;
     private transient String ePassword;
     
+    private BuildLogger buildLogger;
     
     final static Logger logger = Logger.getLogger(UpdatePluginVersion.class);
     
     // Fields in config.jelly must match the parameter names in the "DataBoundConstructor"
     
-    public UpdatePluginVersion(String url, String username, String password, String file) {
+    public UpdatePluginVersion(String url, String username, String password, String file, BuildLogger buildLogger) {
         this.url = url;
         this.eUrl = url;
         this.username = username;
@@ -58,6 +59,7 @@ public class UpdatePluginVersion{
         this.ePassword = password;
         this.file = file;
         this.eFile = file;
+        this.buildLogger = buildLogger;
     }
     
     public String getUrl() {
@@ -77,10 +79,10 @@ public class UpdatePluginVersion{
     }
     
     
-    public boolean perform(BuildLogger buildLogger) throws IOException, InterruptedException {
+    public boolean perform() throws IOException, InterruptedException {
 
         boolean result = false;
-        buildLogger.addBuildLogEntry("*****************  BuildLogger *****************");
+        this.buildLogger.addBuildLogEntry("*****************  BuildLogger *****************");
         HttpClient httpclient = new HttpClient();
         httpclient.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
         logger.info("perform");
