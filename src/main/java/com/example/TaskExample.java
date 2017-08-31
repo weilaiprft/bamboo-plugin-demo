@@ -18,7 +18,7 @@ import java.io.FilenameFilter;
 import java.util.List;
 
 @Scanned
-public class TaskExample implements TaskType
+public class TaskExample implements CommonTaskType
 {
     @ComponentImport
     private final DeploymentVersionService deploymentVersionService;
