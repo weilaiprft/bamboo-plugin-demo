@@ -36,7 +36,7 @@ public class TaskExample implements CommonTaskType {
 		this.deploymentExecutionService = deploymentExecutionService;
 	}
 	
-	private boolean performUpdate(final TaskContext taskContext) {
+	private boolean performUpdate(final CommonTaskContext taskContext) {
 		boolean result = false;
 		final BuildLogger buildLogger = taskContext.getBuildLogger();
 	     try {
@@ -84,7 +84,7 @@ public class TaskExample implements CommonTaskType {
 	}	
 
 	@Override
-	public TaskResult execute(final TaskContext taskContext) throws TaskException {
+	public TaskResult execute(final CommonTaskContext taskContext) throws TaskException {
 
 		final TaskResultBuilder builder = TaskResultBuilder.create(taskContext).failed(); //Initially set to Failed.
 
