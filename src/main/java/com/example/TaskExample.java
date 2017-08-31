@@ -86,7 +86,7 @@ public class TaskExample implements CommonTaskType {
 	@Override
 	public TaskResult execute(final CommonTaskContext taskContext) throws TaskException {
 
-		final TaskResultBuilder builder = TaskResultBuilder.create(taskContext).failed(); //Initially set to Failed.
+		final TaskResultBuilder builder = TaskResultBuilder.newBuilder(taskContext).failed(); //Initially set to Failed.
 
 		if (performUpdate(taskContext)){
 		   builder.success();
