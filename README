@@ -1,5 +1,11 @@
 # Sample Bamboo Plugin
 
+NOTE: use logger branch
+created to update navigator plugin version.
+this is deployment task, actually for build plan task as well, but we use it for deployment task
+
+i have been using play with docker's atlassian sdk container to pull this logger branch and run atlas-run
+
 Requirements include having the atlassian SDK installed.
 https://developer.atlassian.com/docs/getting-started/set-up-the-atlassian-plugin-sdk-and-build-a-project
 
