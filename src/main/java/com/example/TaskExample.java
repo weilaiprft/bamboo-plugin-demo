@@ -40,7 +40,7 @@ public class TaskExample implements CommonTaskType {
 		boolean result = false;
 		final BuildLogger buildLogger = taskContext.getBuildLogger();
 	     try {
-			buildLogger.addBuildLogEntry("*****************  Navigator Version Updater Plugin *****************");
+			buildLogger.addBuildLogEntry("*****************  Navigator Version Updater Plugin v2.0*****************");
 			final String uid = taskContext.getConfigurationMap().get("uid");
 			buildLogger.addBuildLogEntry("use login : " + uid);
 			final String pwd = taskContext.getConfigurationMap().get("pwd");
@@ -50,8 +50,9 @@ public class TaskExample implements CommonTaskType {
 			buildLogger.addBuildLogEntry("workingDir directory is " + workingDir.getAbsolutePath());
 
 			// get jar dir
-			File jarDir = new File(workingDir.getAbsolutePath() + File.separator + "target");
-			buildLogger.addBuildLogEntry("jarDir directory is " + jarDir.getAbsolutePath());
+			//File jarDir = new File(workingDir.getAbsolutePath() + File.separator + "target");
+			File jarDir = workingDir;
+		     	buildLogger.addBuildLogEntry("jarDir directory is " + jarDir.getAbsolutePath());
 
 			// get jarfile
 			File[] jarFiles = jarDir.listFiles(new FilenameFilter() {
